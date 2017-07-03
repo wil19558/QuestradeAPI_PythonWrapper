@@ -39,7 +39,7 @@ logger = logging.getLogger('questrade')
 
 def get_valid_token():
     token = token_ops.get_token()
-    
+
     # If token expired, get a new one
     if token_ops.is_token_expired(token):
         # First try to use the refresh token to get a new access token
@@ -58,7 +58,7 @@ def get_base_uri(token):
     return api_server + api_version
 
 
-def call_api(api, params=None):
+def call_api(api, params=None, http_verb="GET"):
     token = get_valid_token()
     if token == None:
         response = {'message': 'no token'}
@@ -71,8 +71,6 @@ def call_api(api, params=None):
     
     uri = get_base_uri(token) + api
     
-    http_verb = "GET"
-    
     response = {}
     
     try:
@@ -82,8 +80,10 @@ def call_api(api, params=None):
             logging.info('Params: \t' + json.dumps(params))
             logging.info('Calling:\t' + http_verb + ' ' + uri)
             logging.info('>>>>>>>>>>>>>>>>>>>>>>>>>')
-        
-        r = requests.get(uri, headers=headers, params=params)
+        if http_verb == "GET":
+            r = requests.get(uri, headers=headers, params=params)
+        elif http_verb == "POST":
+            r = requests.post(uri, headers=headers, params=params)
         response = r.json()
             
     except ValueError as e:
@@ -105,7 +105,7 @@ def call_api(api, params=None):
         return response
 
 
-def lookup_symbol_id(symbol):    
+def lookup_symbol_id(symbol):
     symbol_id = "-1"
     
     if isinstance(symbol, (int)):

@@ -31,14 +31,15 @@
 import os
 import json
 import time
+import webbrowser
 import questrade.browser.wrapper as browser
+
 
 def get_token(new=False):
     if new == True:
-        token = browser.login()
-    
+        webbrowser.get('firefox').open_new_tab('https://practicelogin.questrade.com/Signin.aspx?ReturnUrl=%2fAPIAccess%2f')
     else:
-        try:    
+        try:
             with open(os.path.join(os.path.expanduser('~'), 'questrade_token.json')) as f:
                 jsonStr = f.read()
                 token = json.loads(jsonStr)
@@ -47,7 +48,7 @@ def get_token(new=False):
     
     if not is_valid_token(token):
         token = None
-    
+
     return token
 
 
@@ -121,14 +122,15 @@ def is_valid_token(token):
 
 def is_token_expired(token):
     if token == None:
-        expires_at = get_token_value('expires_at')
+        expires_in = get_token_value('expires_in')
     else:
-        expires_at = token['expires_at']
+        expires_in = token['expires_in']
     
-    if expires_at == None:
+    if expires_in == None:
         return True
     else:
-        return expires_at < time.time()
+        last_modified = os.stat(os.path.join(os.path.expanduser('~'), 'questrade_token.json')).st_mtime
+        return time.time() > (last_modified + expires_in)
 
 
 def print_token(token):

@@ -95,9 +95,10 @@ def login():
 
 
 def refresh_token(refresh_token):
-    params = {'refresh_token': refresh_token}
+    params = {'grant_type': 'refresh_token', 'refresh_token': refresh_token}
     r = requests.get(refresh_url, params)
     if r.status_code == requests.codes.ok:
+        print "Obtained new refresh token"
         token = json.loads(r.text)
         __store_token__(r.text)
     else:
