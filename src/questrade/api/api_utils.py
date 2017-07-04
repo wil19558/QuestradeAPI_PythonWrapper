@@ -68,7 +68,6 @@ def call_api(api, params=None, http_verb="GET"):
     
     authorization_value = token_ops.get_token_type(token) + ' ' + token_ops.get_access_token(token)
     headers = {'Authorization': authorization_value}
-    
     uri = get_base_uri(token) + api
     
     response = {}

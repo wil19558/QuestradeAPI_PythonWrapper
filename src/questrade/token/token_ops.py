@@ -37,7 +37,7 @@ import questrade.browser.wrapper as browser
 
 def get_token(new=False):
     if new == True:
-        webbrowser.get('firefox').open_new_tab('https://practicelogin.questrade.com/Signin.aspx?ReturnUrl=%2fAPIAccess%2f')
+        webbrowser.get('firefox').open_new_tab('https://login.questrade.com/Signin.aspx?ReturnUrl=%2fAPIAccess%2f')
     else:
         try:
             with open(os.path.join(os.path.expanduser('~'), 'questrade_token.json')) as f:

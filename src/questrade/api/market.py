@@ -162,7 +162,6 @@ def markets_quotes_options(option_id_filters, ids):
     '''
     params = {'filters': option_id_filters,
               'ids': ids}
-    import ipdb; ipdb.set_trace()
     return api_utils.call_api(__api_ops__['moptions'], params, "POST")
 
 
